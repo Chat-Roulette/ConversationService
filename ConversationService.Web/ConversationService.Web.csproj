@@ -6,4 +6,14 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="StackExchange.Redis.Extensions.Core" Version="8.0.4" />
+    <PackageReference Include="StackExchange.Redis.Extensions.Newtonsoft" Version="8.0.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ConversationService.Dtos\ConversationService.Dtos.csproj" />
+    <ProjectReference Include="..\ConversationService.Services\ConversationService.Services.csproj" />
+  </ItemGroup>
+
 </Project>
