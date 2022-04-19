@@ -15,6 +15,23 @@ namespace ConversationService.Web.Controllers
             _conversationService = conversationService;
         }
 
+        [HttpGet("{conversationId}")]
+        public async Task<IActionResult> GetConversation(Guid conversationId)
+        {
+            var result = await _conversationService.GetConversationAsync(conversationId);
+
+            if (result is null)
+            {
+                return BadRequest("Conversation doesn't exist");
+            }
+
+            return Ok(new ConversationDto
+            {
+                ConversationId = result.Id,
+                Participants = result.Participants,
+            });
+        }
+
         [HttpPost]
         public async Task<ConversationDto> CreateConversation(CreateConversationDto createConversationDto)
         {

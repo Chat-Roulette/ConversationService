@@ -24,14 +24,15 @@ namespace ConversationService.Services.Implementations
 
             var conversationId = Guid.NewGuid();
 
-            await db.ListAddToLeftAsync(conversationId.ToString(), participants.First());
-            await db.ListAddToLeftAsync(conversationId.ToString(), participants.Skip(1).First());
-
-            return new ConversationModel
+            var conversationModel = new ConversationModel
             {
                 Id = conversationId,
                 Participants = participants
             };
+
+            await db.AddAsync(conversationId.ToString(), conversationModel);
+
+            return conversationModel;
         }
 
         public async Task<bool> DeleteConversationAsync(Guid conversationId)
@@ -64,6 +65,20 @@ namespace ConversationService.Services.Implementations
             }
 
             return true;
+        }
+
+        public async Task<ConversationModel> GetConversationAsync(Guid conversationId)
+        {
+            var db = _redisClient.GetDb(0);
+
+            if (!await db.ExistsAsync(conversationId.ToString()))
+            {
+                return null;
+            };
+
+            var conversationModel = await db.GetAsync<ConversationModel>(conversationId.ToString());
+
+            return conversationModel;
         }
     }
 }
